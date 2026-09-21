@@ -61,7 +61,7 @@ jobs:
       # Build application
       - name: Build application
         env:
-          BOOKING_DB_TEST_URL: jdbc:mysql://booking-mysql:3306/Booking-service
+          BOOKING_DB_TEST_URL: jdbc:mysql://Booking-service:3306/Booking-service
           BOOKING_DB_USER: ${{ secrets.BOOKING_DB_USER }}
           BOOKING_DB_PASS: ${{ secrets.BOOKING_DB_PASS }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
