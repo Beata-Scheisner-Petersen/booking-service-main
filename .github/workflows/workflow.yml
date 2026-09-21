@@ -24,21 +24,20 @@ jobs:
           - 3307:3306
         options: --health-cmd="mysqladmin ping -h localhost" --health-interval=10s --health-timeout=5s --health-retries=3
 
-      customer-service:
-        image: beatasp/booking-system-customer
-        ports:
-          - 8081:8081
-        env:
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          CUSTOMER_DB_CLIENT_URL: http://customer-service:8081
+#      customer-service:
+#        image: beatasp/booking-system-customer
+#        ports:
+#          - 8081:8081
+#        env:
+#          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+#
+#      review-service:
+#        image: sleepingfores7s/booking-review
+#        ports:
+#          - 8083:8083
+#        env:
+#          JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
-      review-service:
-        image: sleepingfores7s/booking-review
-        ports:
-          - 8083:8083
-        env:
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          REVIEW_DB_CLIENT_URL: http://review-service:8083
     steps:
       #Check out code
       - name: checkout code
@@ -50,6 +49,21 @@ jobs:
           java-version: "17"
           distribution: "temurin"
           cache: "maven"
+      - name: Start Docker-Compose
+        run: docker compose up -d
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          BOOKING_DB_ROOT_PASS: ${{ secrets.BOOKING_DB_ROOT_PASS }}
+          BOOKING_DB_USER: ${{ secrets.BOOKING_DB_USER }}
+          BOOKING_DB_PASS: ${{ secrets.BOOKING_DB_PASS }}
+
+          CUSTOMER_DB_ROOT_PASS: ${{ secrets.CUSTOMER_DB_ROOT_PASS }}
+          CUSTOMER_DB_PASS: ${{ secrets.CUSTOMER_DB_PASS }}
+          CUSTOMER_DB_USER: ${{ secrets.CUSTOMER_DB_USER }}
+
+          REVIEW_DB_ROOT_PASS: ${{ secrets.REVIEW_DB_ROOT_PASS }}
+          REVIEW_DB_PASS: ${{ secrets.REVIEW_DB_PASS }}
+          REVIEW_DB_USER: ${{ secrets.REVIEW_DB_USER }}
       # Run tests
       - name: Run tests
         env:
