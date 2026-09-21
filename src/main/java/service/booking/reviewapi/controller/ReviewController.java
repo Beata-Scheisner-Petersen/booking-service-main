@@ -1,6 +1,5 @@
 package service.booking.reviewapi.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import service.booking.reviewapi.client.ReviewClient;

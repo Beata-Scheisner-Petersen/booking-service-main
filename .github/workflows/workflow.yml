@@ -23,6 +23,18 @@ jobs:
         ports:
           - 3307:3306
         options: --health-cmd="mysqladmin ping -h localhost" --health-interval=10s --health-timeout=5s --health-retries=3
+      customer-service:
+        image: beatasp/booking-system-customer
+        ports:
+          - 8081:8081
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      review-service:
+        image: sleepingfores7s/booking-review
+        ports:
+          - 8083:8083
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
       #Check out code
       - name: checkout code
