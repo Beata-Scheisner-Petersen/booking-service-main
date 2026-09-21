@@ -53,7 +53,7 @@ jobs:
       # Run tests
       - name: Run tests
         env:
-          BOOKING_DB_TEST_URL: jdbc:mysql://localhost:3306/Booking-service
+          BOOKING_DB_TEST_URL: jdbc:mysql://localhost:3307/Booking-service
           BOOKING_DB_USER: ${{ secrets.BOOKING_DB_USER }}
           BOOKING_DB_PASS: ${{ secrets.BOOKING_DB_PASS }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
