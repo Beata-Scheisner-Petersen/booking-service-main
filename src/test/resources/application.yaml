@@ -3,7 +3,8 @@ spring:
     name: Booking-service
 
   datasource:
-    url: jdbc:mysql://localhost:3306/Booking-service
+    #url: jdbc:mysql://localhost:3306/Booking-service
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/Booking-service}
     username: ${BOOKING_DB_USER}
     password: ${BOOKING_DB_PASS}
     CUSTOMER_DB_CLIENT_URL: http://customer-service:8081
