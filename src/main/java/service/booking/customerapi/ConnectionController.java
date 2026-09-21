@@ -44,7 +44,7 @@ public class ConnectionController {
             );
         } catch (HttpClientErrorException e) {
             return (ResponseEntity
-                    .status(400)
+                    .status(409)
                     .body(e.getResponseBodyAsString())
             );
         } catch (org.springframework.web.client.ResourceAccessException e) {
