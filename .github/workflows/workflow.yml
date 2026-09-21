@@ -37,7 +37,7 @@ jobs:
       # Run tests
       - name: Run tests
         env:
-          SPRING_DATASOURCE_URL: ${{ secrets.BOOKING_TEST_DB_URL }}
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3307/Booking-service
           SPRING_DATASOURCE_USERNAME: ${{ secrets.BOOKING_DB_USER }}
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.BOOKING_DB_PASS }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
@@ -45,7 +45,7 @@ jobs:
       # Build application
       - name: Build application
         env:
-          SPRING_DATASOURCE_URL: ${{ secrets.BOOKING_DB_URL }}
+          SPRING_DATASOURCE_URL: jdbc:mysql://booking-mysql:3306/Booking-service
           SPRING_DATASOURCE_USERNAME: ${{ secrets.BOOKING_DB_USER }}
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.BOOKING_DB_PASS }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
