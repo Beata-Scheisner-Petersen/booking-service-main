@@ -47,6 +47,16 @@ public class ConnectionController {
                     .status(400)
                     .body(e.getResponseBodyAsString())
             );
+        } catch (org.springframework.web.client.ResourceAccessException e) {
+            return (ResponseEntity
+                            .status(404)
+                            .body(e.getCause())
+            );
+        } catch (service.booking.exceptionhandler.customexeptions.ExternalServiceConnectionException e) {
+            return (ResponseEntity
+                    .status(500)
+                    .body(e.getCause())
+            );
         } catch (Exception e) {
             return (ResponseEntity
                     .status(503)
