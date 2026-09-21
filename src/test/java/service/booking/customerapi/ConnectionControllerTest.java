@@ -4,7 +4,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.*;
 import org.springframework.boot.webmvc.test.autoconfigure.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.*;
@@ -15,9 +15,8 @@ import java.nio.charset.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
 @SpringBootTest()
-
+@org.springframework.test.context.ActiveProfiles("connection")
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ConnectionControllerTest {
