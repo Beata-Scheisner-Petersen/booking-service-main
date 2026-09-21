@@ -1,19 +1,19 @@
 package service.booking.reviewapi.controller;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.*;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.boot.test.context.*;
+import org.springframework.boot.webmvc.test.autoconfigure.*;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.*;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
+import java.nio.charset.*;
+import java.util.*;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest()
 @AutoConfigureMockMvc
@@ -22,10 +22,13 @@ class ReviewControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @org.springframework.beans.factory.annotation.Value("${JWT_SECRET}")
+    private String JWT_SECRET;
+
     @Test
     void createNewReview_ShouldSaveToDatabase_WhenAuthenticated() throws Exception {
         // 1. Generate a valid JWT token locally (bypassing the offline login service)
-        byte[] secretKeyBytes = "bu5HenKK9pCurkUUic604aWzpvY4XruaVZsIkArn0EE9M9GFfTX1vq3vSubM1gwyrZB0Fs22yv5XsWt8jxbT8h".getBytes(StandardCharsets.UTF_8);
+        byte[] secretKeyBytes = JWT_SECRET.getBytes(StandardCharsets.UTF_8);
 
         String token = Jwts.builder()
                 .subject("1")

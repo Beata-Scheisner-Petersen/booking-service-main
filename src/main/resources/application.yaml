@@ -6,6 +6,8 @@ spring:
     url: ${BOOKING_DB_URL}
     username: ${BOOKING_DB_USER}
     password: ${BOOKING_DB_PASS}
+    CUSTOMER_DB_CLIENT_URL: http://customer-service:8081
+    REVIEW_DB_CLIENT_URL: http://review-service:8083
 
   jpa:
     hibernate:
