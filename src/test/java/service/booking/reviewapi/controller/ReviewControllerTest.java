@@ -22,7 +22,7 @@ class ReviewControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @org.springframework.beans.factory.annotation.Value("${JWT_SECRET}")
+    @Value("${JWT_SECRET}")
     private String JWT_SECRET;
 
     @Test
