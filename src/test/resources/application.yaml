@@ -10,17 +10,4 @@ spring:
     CUSTOMER_DB_CLIENT_URL: http://localhost:8081
     REVIEW_DB_CLIENT_URL: http://localhost:8083
 
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#    defer-datasource-initialization: true
-#
-#  sql:
-#    init:
-#      mode: always
-
-jwt:
-  secret: ${JWT_SECRET}
-
-#server:
-#  port: 8082
+JWT_SECRET: ${JWT_SECRET}
