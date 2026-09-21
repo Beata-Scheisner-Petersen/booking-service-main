@@ -16,13 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@SpringBootTest(properties = {
-        "spring.datasource.url=jdbc:mysql://localhost:3307/Booking-service",
-        "spring.datasource.username=booking_user",
-        "spring.datasource.password=booking_password",
-        "REVIEW_DB_CLIENT_URL=http://localhost:8081",
-        "JWT_SECRET=bu5HenKK9pCurkUUic604aWzpvY4XruaVZsIkArn0EE9M9GFfTX1vq3vSubM1gwyrZB0Fs22yv5XsWt8jxbT8h"
-})
+@SpringBootTest()
 
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
