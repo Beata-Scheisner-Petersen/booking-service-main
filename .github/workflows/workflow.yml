@@ -1,64 +1,137 @@
-name: workflow.yml
+#name: workflow.yml
+#on:
+#  push:
+#    branches:
+#      - main
+#      - master
+#  pull_request:
+#    branches:
+#      - main
+#      - master
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+##    services:
+#
+##      customer-service:
+##        image: beatasp/booking-system-customer
+##        ports:
+##          - 8081:8081
+##        env:
+##          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+##
+##      review-service:
+##        image: sleepingfores7s/booking-review
+##        ports:
+##          - 8083:8083
+##        env:
+##          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+#
+#    steps:
+#      #Check out code
+#      - name: checkout code
+#        uses: actions/checkout@v4
+#      # Run environment
+#      - name: set up java 17
+#        uses: actions/setup-java@v4
+#        with:
+#          java-version: "17"
+#          distribution: "temurin"
+#          cache: "maven"
+#      - name: Start Docker-Compose
+#        run: docker compose up -d
+#        env:
+#          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+#          BOOKING_DB_ROOT_PASS: ${{ secrets.BOOKING_DB_ROOT_PASS }}
+#          BOOKING_DB_USER: ${{ secrets.BOOKING_DB_USER }}
+#          BOOKING_DB_PASS: ${{ secrets.BOOKING_DB_PASS }}
+#
+#          CUSTOMER_DB_ROOT_PASS: ${{ secrets.CUSTOMER_DB_ROOT_PASS }}
+#          CUSTOMER_DB_PASS: ${{ secrets.CUSTOMER_DB_PASS }}
+#          CUSTOMER_DB_USER: ${{ secrets.CUSTOMER_DB_USER }}
+#
+#          REVIEW_DB_ROOT_PASS: ${{ secrets.REVIEW_DB_ROOT_PASS }}
+#          REVIEW_DB_PASS: ${{ secrets.REVIEW_DB_PASS }}
+#          REVIEW_DB_USER: ${{ secrets.REVIEW_DB_USER }}
+#      # Run tests
+#      - name: Run tests
+#        env:
+#          BOOKING_DB_TEST_URL: jdbc:mysql://localhost:3307/Booking-service
+#          BOOKING_DB_USER: ${{ secrets.BOOKING_DB_USER }}
+#          BOOKING_DB_PASS: ${{ secrets.BOOKING_DB_PASS }}
+#          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+#        run: mvn -B test
+#      # Build application
+#      - name: Build application
+#        env:
+#          BOOKING_DB_URL: jdbc:mysql://Booking-service:3306/Booking-service
+#          BOOKING_DB_USER: ${{ secrets.BOOKING_DB_USER }}
+#          BOOKING_DB_PASS: ${{ secrets.BOOKING_DB_PASS }}
+#          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+#        run: mvn -B package -DskipTests
+#      - name: close
+#        if: always()
+#        run: docker compose down -v
+
+name: Booking-Service CI
+
 on:
   push:
-    branches:
-      - main
-      - master
+    branches: [ "master" ]
   pull_request:
-    branches:
-      - main
-      - master
+    branches: [ "master" ]
 
 jobs:
-  build:
+  build_and_test:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_USER: ${{ secrets.BOOKING_DB_USER }}
-          MYSQL_PASSWORD: ${{ secrets.BOOKING_DB_PASS }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.BOOKING_DB_ROOT_PASS }}
-          MYSQL_DATABASE: Booking-service
-        ports:
-          - 3307:3306
-        options: --health-cmd="mysqladmin ping -h localhost" --health-interval=10s --health-timeout=5s --health-retries=3
-      customer-service:
-        image: beatasp/booking-system-customer
-        ports:
-          - 8081:8081
-        env:
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      review-service:
-        image: sleepingfores7s/booking-review
-        ports:
-          - 8083:8083
-        env:
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+    permissions:
+      contents: write
+
     steps:
-      #Check out code
-      - name: checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
-      # Run environment
-      - name: set up java 17
-        uses: actions/setup-java@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
         with:
-          java-version: "17"
-          distribution: "temurin"
-          cache: "maven"
-      # Run tests
-      - name: Run tests
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Start Docker Compose Stack
+        run: docker compose up -d
         env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          BOOKING_DB_ROOT_PASS: ${{ secrets.BOOKING_DB_ROOT_PASS }}
+          BOOKING_DB_USER: ${{ secrets.BOOKING_DB_USER }}
+          BOOKING_DB_PASS: ${{ secrets.BOOKING_DB_PASS }}
+
+          CUSTOMER_DB_ROOT_PASS: ${{ secrets.CUSTOMER_DB_ROOT_PASS }}
+          CUSTOMER_DB_PASS: ${{ secrets.CUSTOMER_DB_PASS }}
+          CUSTOMER_DB_USER: ${{ secrets.CUSTOMER_DB_USER }}
+
+          REVIEW_DB_ROOT_PASS: ${{ secrets.REVIEW_DB_ROOT_PASS }}
+          REVIEW_DB_PASS: ${{ secrets.REVIEW_DB_PASS }}
+          REVIEW_DB_USER: ${{ secrets.REVIEW_DB_USER }}
+
+      - name: Wait for MySQL Databases to be Ready
+        run: |
+          echo "Waiting for databases to accept connections..."
+          until nc -z localhost 3307 && nc -z localhost 3308 && nc -z localhost 3309; do
+            sleep 2
+          done
+          echo "Databases are up and running!"
+
+      - name: Run Integration Tests with Maven
+        run: mvn -B clean test --file pom.xml
+        env:
+          SPRING_PROFILES_ACTIVE: test
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
           SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3307/Booking-service
           SPRING_DATASOURCE_USERNAME: ${{ secrets.BOOKING_DB_USER }}
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.BOOKING_DB_PASS }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        run: mvn -B test
-      # Build application
-      - name: Build application
-        env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://booking-mysql:3306/Booking-service
-          SPRING_DATASOURCE_USERNAME: ${{ secrets.BOOKING_DB_USER }}
-          SPRING_DATASOURCE_PASSWORD: ${{ secrets.BOOKING_DB_PASS }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        run: mvn -B package -DskipTests
+
+      - name: Stop Containers and Cleanup
+        if: always()
+        run: docker compose down

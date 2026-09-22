@@ -44,8 +44,18 @@ public class ConnectionController {
             );
         } catch (HttpClientErrorException e) {
             return (ResponseEntity
-                    .status(400)
+                    .status(409)
                     .body(e.getResponseBodyAsString())
+            );
+        } catch (org.springframework.web.client.ResourceAccessException e) {
+            return (ResponseEntity
+                            .status(404)
+                            .body(e.getCause())
+            );
+        } catch (service.booking.exceptionhandler.customexeptions.ExternalServiceConnectionException e) {
+            return (ResponseEntity
+                    .status(500)
+                    .body(e.getCause())
             );
         } catch (Exception e) {
             return (ResponseEntity

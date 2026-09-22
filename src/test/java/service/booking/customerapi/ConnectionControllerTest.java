@@ -1,5 +1,4 @@
 package service.booking.customerapi;
-
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.*;
 import org.junit.jupiter.api.*;
@@ -16,8 +15,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
-@SpringBootTest()
-
+@SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ConnectionControllerTest {

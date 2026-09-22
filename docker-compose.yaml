@@ -19,13 +19,13 @@ services:
       - booking_mysql_data:/var/lib/mysql
 
   booking-service:
-    image: valeriakostova/booking-service
+    build: .
     container_name: booking-service
     ports:
       - "8082:8082"
     environment:
       JWT_SECRET: ${JWT_SECRET}
-      SPRING_DATASOURCE_URL: ${BOOKING_DB_URL}
+      SPRING_DATASOURCE_URL: jdbc:mysql://booking-mysql:3306/Booking-service
       SPRING_DATASOURCE_USERNAME: ${BOOKING_DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${BOOKING_DB_PASS}
     depends_on:
@@ -53,13 +53,13 @@ services:
       - customer_mysql_data:/var/lib/mysql
 
   customer-service:
-    image: beatasp/booking-system-customer
+    image: beatasp/booking-system-customer:latest
     container_name: customer-service
     ports:
       - "8081:8081"
     environment:
       JWT_SECRET: ${JWT_SECRET}
-      SPRING_DATASOURCE_URL: ${CUSTOMER_DB_URL}
+      SPRING_DATASOURCE_URL: jdbc:mysql://customer-mysql:3306/Customer-service
       SPRING_DATASOURCE_USERNAME: ${CUSTOMER_DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${CUSTOMER_DB_PASS}
     depends_on:
@@ -87,13 +87,13 @@ services:
       - review_mysql_data:/var/lib/mysql
 
   review-service:
-    image: sleepingfores7s/booking-review
+    image: beatasp/review-service:latest
     container_name: review-service
     ports:
       - "8083:8083"
     environment:
       JWT_SECRET: ${JWT_SECRET}
-      SPRING_DATASOURCE_URL: ${REVIEW_DB_URL}
+      SPRING_DATASOURCE_URL: jdbc:mysql://review-db:3306/Review-service
       SPRING_DATASOURCE_USERNAME: ${REVIEW_DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${REVIEW_DB_PASS}
     depends_on:
