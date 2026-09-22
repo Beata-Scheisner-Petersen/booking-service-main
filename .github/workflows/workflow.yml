@@ -68,7 +68,7 @@ jobs:
 
       - name: push to Docker Hub
         run: |
-          docker push beatasp/booking-image:${{github.run_number}}
+          docker push beatasp/booking-image:latest
 
       - name: Stop Containers and Cleanup
         if: always()
