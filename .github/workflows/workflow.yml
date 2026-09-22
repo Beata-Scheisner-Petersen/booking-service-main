@@ -56,11 +56,19 @@ jobs:
           SPRING_DATASOURCE_USERNAME: ${{ secrets.BOOKING_DB_USER }}
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.BOOKING_DB_PASS }}
 
-      - name: bygg
+      - name: Build application
         run: mvn -B package -DskipTests
 
       - name: Login on DockerHub
         run: echo "${{secrets.DOCKER_HUB_TOKEN}}" | docker login -u "${{secrets.DOCKER_HUB_USER}}" --password-stdin
+
+      - name: Build image
+        run: |
+          docker build -t beatasp/booking-image:${{github.run_number}}
+
+      - name: push to Docker Hub
+        run: |
+          docker push beatasp/booking-image:${{github.run_number}}
 
       - name: Stop Containers and Cleanup
         if: always()
