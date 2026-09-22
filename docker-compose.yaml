@@ -19,7 +19,7 @@ services:
       - booking_mysql_data:/var/lib/mysql
 
   booking-service:
-    build: .
+    image: beatasp/booking-image:latest
     container_name: booking-service
     ports:
       - "8082:8082"
